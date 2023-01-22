@@ -41,7 +41,9 @@ local function list_files_in(dir)
   -- loop through all files
   if p == nil then return nil, error("couldn't read dir") end
   for file in p:lines() do
-    table.insert(files, file)
+    if not file:match('^.+/%..+') then
+      table.insert(files, file)
+    end
   end
   return files, nil
 end
@@ -89,6 +91,14 @@ function Lib:prev_dir()
   self:update()
 end
 
+function Lib:random_dir()
+  math.randomseed(os.time())
+  local number = math.random(#self.dirs)
+  self.dir_id.id = number
+  self.dir_name = self.dirs[self.dir_id:current()]
+  self:update()
+end
+
 function Lib:next_file()
   self.file_name = self.dir_content[self.file_id.next()]
   self.ids[self.dir_name] = self.file_id:current()
@@ -96,6 +106,14 @@ end
 
 function Lib:prev_file()
   self.file_name = self.dir_content[self.file_id.prev()]
+  self.ids[self.dir_name] = self.file_id:current()
+end
+
+function Lib:random_file()
+  math.randomseed(os.time())
+  local number = math.random(#self.dir_content)
+  self.file_id.id = number
+  self.file_name = self.dir_content[self.file_id:current()]
   self.ids[self.dir_name] = self.file_id:current()
 end
 

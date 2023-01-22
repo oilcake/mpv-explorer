@@ -2,18 +2,17 @@ local mp = require('mp')
 local lib = require('lib')
 local dir1 = '/Volumes/BIGBRO2/VDTMPRR/UntitledDiskEver/[CUTCUT]'
 
-Lib = lib:new(dir1)
 
 local M = {}
 
 local function update_current()
+  print(Lib.file_name)
   mp.commandv('loadfile', Lib.file_name)
 end
 
 function M.jump()
-  mp.commandv('playlist-shuffle')
-  mp.commandv('playlist-next')
-  mp.commandv('playlist-unshuffle')
+  Lib:random_dir()
+  update_current()
 end
 
 function M.file_next()
@@ -23,6 +22,11 @@ end
 
 function M.file_prev()
   Lib:prev_file()
+  update_current()
+end
+
+function M.file_random()
+  Lib:random_file()
   update_current()
 end
 
@@ -37,6 +41,7 @@ function M.dir_prev()
 end
 
 function M.init()
+  Lib = lib:new(dir1)
   update_current()
 end
 

@@ -28,6 +28,7 @@ end
 
 function M.jump()
   Lib:random_dir()
+  update_playlist()
   update_current()
 end
 

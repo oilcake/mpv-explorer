@@ -100,20 +100,17 @@ function Lib:random_dir()
 end
 
 function Lib:next_file()
-  self.file_name = self.dir_content[self.file_id.next()]
-  self.ids[self.dir_name] = self.file_id:current()
+  self.ids[self.dir_name] = self.file_id:next()
 end
 
 function Lib:prev_file()
-  self.file_name = self.dir_content[self.file_id.prev()]
-  self.ids[self.dir_name] = self.file_id:current()
+  self.ids[self.dir_name] = self.file_id:prev()
 end
 
 function Lib:random_file()
   math.randomseed(os.time())
   local number = math.random(#self.dir_content)
   self.file_id.id = number
-  self.file_name = self.dir_content[self.file_id:current()]
   self.ids[self.dir_name] = self.file_id:current()
 end
 

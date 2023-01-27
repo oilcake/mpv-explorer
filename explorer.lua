@@ -1,13 +1,29 @@
 local mp = require('mp')
 local lib = require('lib')
 local dir1 = '/Volumes/BIGBRO2/VDTMPRR/UntitledDiskEver/[CUTCUT]'
+local tmp_playlist = 'tmp_playlist.mpv'
 
 
 local M = {}
 
+local function dir_content_to_file()
+  local playlist_file = io.open(tmp_playlist, "w")
+  if playlist_file ~= nil then
+    for _, file in ipairs(Lib.dir_content) do
+      playlist_file:write(file)
+      playlist_file:write('\n')
+    end
+    playlist_file:close()
+  end
+end
+
+local function update_playlist()
+  dir_content_to_file()
+  mp.commandv("loadlist", tmp_playlist, "replace")
+end
+
 local function update_current()
-  print(Lib.file_name)
-  mp.commandv('loadfile', Lib.file_name)
+  mp.commandv("playlist-play-index", Lib.file_id:current() - 1)
 end
 
 function M.jump()
@@ -32,16 +48,19 @@ end
 
 function M.dir_next()
   Lib:next_dir()
+  update_playlist()
   update_current()
 end
 
 function M.dir_prev()
   Lib:prev_dir()
+  update_playlist()
   update_current()
 end
 
 function M.init()
   Lib = lib:new(dir1)
+  update_playlist()
   update_current()
 end
 

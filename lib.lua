@@ -71,6 +71,7 @@ function Lib:new(path)
   end
   self.dir_name = self.dirs[self.dir_id:current()]
   self:update()
+  math.randomseed(os.time())
   return self
 end
 
@@ -92,7 +93,6 @@ function Lib:prev_dir()
 end
 
 function Lib:random_dir()
-  math.randomseed(os.time())
   local number = math.random(#self.dirs)
   self.dir_id.id = number
   self.dir_name = self.dirs[self.dir_id:current()]
@@ -108,7 +108,6 @@ function Lib:prev_file()
 end
 
 function Lib:random_file()
-  math.randomseed(os.time())
   local number = math.random(#self.dir_content)
   self.file_id.id = number
   self.ids[self.dir_name] = self.file_id:current()

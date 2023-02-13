@@ -49,14 +49,13 @@ local function list_files_in(dir)
 end
 
 
--- Tree is kinda filesystem object that holds an array of arrays of files
+-- Lib is kinda filesystem object that holds an array of arrays of files
 local Lib = {
   dirs = {},
   dir_id = nil,
   dir_name = nil,
   dir_content = {},
   file_id = nil,
-  file_name = nil,
   ids = {}
 }
 
@@ -67,7 +66,9 @@ function Lib:new(path)
   self.dirs = dirs
   self.dir_id = reader:new(self.dirs, 1)
   for _, dir in ipairs(self.dirs) do
-    self.ids[dir] = 1
+    if list_files_in(dir) ~= nil then
+      self.ids[dir] = 1
+    end
   end
   self.dir_name = self.dirs[self.dir_id:current()]
   self:update()
@@ -79,7 +80,6 @@ function Lib:update()
   self.dir_content = list_files_in(self.dir_name)
   local position = self.ids[self.dir_name]
   self.file_id = reader:new(self.dir_content, position)
-  self.file_name = self.dir_content[self.file_id.id]
 end
 
 function Lib:next_dir()

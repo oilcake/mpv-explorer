@@ -41,7 +41,7 @@ local function list_files_in(dir)
   -- loop through all files
   if p == nil then return nil, error("couldn't read dir") end
   for file in p:lines() do
-    if not file:match('^.+/%..+') then
+    if not file:match('^.+/%..+') and not file:match('^.+%.clp') then
       table.insert(files, file)
     end
   end

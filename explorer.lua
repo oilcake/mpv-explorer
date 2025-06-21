@@ -1,7 +1,7 @@
 local mp = require('mp')
 local lib = require('lib')
-local dir1 = '/Volumes/BIGBRO2/VDTMPRR/UntitledDiskEver/[CUTCUT]'
 local tmp_playlist = 'tmp_playlist.mpv'
+local working_dir = mp.get_property("working-directory")
 
 
 local M = {}
@@ -60,7 +60,7 @@ function M.dir_prev()
 end
 
 function M.init()
-  Lib = lib:new(dir1)
+  Lib = lib:new(working_dir)
   update_playlist()
   update_current()
 end

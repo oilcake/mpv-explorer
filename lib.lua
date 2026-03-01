@@ -16,11 +16,11 @@ end
 local function is_empty(dir)
 	local p = io.popen('find "' .. dir .. '" -type f | wc -l')
 	if p == nil then
-		return false
+		return true
 	end
 	local count = tonumber(p:read("*a"))
 	p:close()
-	if count > 1 then
+	if count > 0 then
 		return false
 	end
 	return true

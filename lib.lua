@@ -107,13 +107,20 @@ function Lib:new(path)
 	assert(path ~= nil)
 	local dirs = list_dirs(path)
 	assert(dirs ~= nil)
-	self.dirs = dirs
-	self.dir_id = reader:new(self.dirs, 1)
-	for _, dir in ipairs(self.dirs) do
-		if list_files_in(dir) ~= nil then
+	-- ponytail: filter dirs with video files only, skip empty/invalid
+	local valid_dirs = {}
+	for _, dir in ipairs(dirs) do
+		local files = list_files_in(dir)
+		if files and #files > 0 then
+			table.insert(valid_dirs, dir)
 			self.ids[dir] = 1
 		end
 	end
+	if #valid_dirs == 0 then
+		return nil, "no directories with video files found"
+	end
+	self.dirs = valid_dirs
+	self.dir_id = reader:new(self.dirs, 1)
 	self.dir_name = self.dirs[self.dir_id:current()]
 	self:update()
 	math.randomseed(os.time())

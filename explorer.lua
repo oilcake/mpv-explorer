@@ -60,6 +60,10 @@ end
 
 function M.init()
 	Lib = lib:new(working_dir)
+	if not Lib then
+		mp.msg.warn("no directories with video files found")
+		return
+	end
 	update_playlist()
 	update_current()
 end

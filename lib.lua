@@ -43,9 +43,9 @@ local function list_dirs(path)
 	return dirs, nil
 end
 
-local function isVideoFile(filename)
-	-- Список допустимых видео расширений (можно дополнять)
-	local videoExtensions = {
+local function isMediaFile(filename)
+	filename = filename:lower()
+	local extensions = {
 		".mp4",
 		".avi",
 		".mov",
@@ -61,18 +61,24 @@ local function isVideoFile(filename)
 		".ogv",
 		".vob",
 		".ts",
+		".jpg",
+		".jpeg",
+		".png",
+		".gif",
+		".webp",
+		".bmp",
+		".tiff",
+		".tif",
+		".avif",
+		".heic",
+		".heif",
+		".jxl",
 	}
-
-	-- Приводим имя файла к нижнему регистру для унификации
-	filename = filename:lower()
-
-	-- Проверяем каждое расширение из списка
-	for _, ext in ipairs(videoExtensions) do
+	for _, ext in ipairs(extensions) do
 		if filename:sub(-#ext) == ext then
 			return true
 		end
 	end
-
 	return false
 end
 
@@ -86,7 +92,7 @@ local function list_files_in(dir)
 		return nil, error("couldn't read dir")
 	end
 	for file in p:lines() do
-		if not file:match("^.+/%..+") and not file:match("^.+%.clp") and isVideoFile(file) then
+		if not file:match("^.+/%..+") and not file:match("^.+%.clp") and isMediaFile(file) then
 			table.insert(files, file)
 		end
 	end

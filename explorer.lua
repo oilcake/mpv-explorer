@@ -5,6 +5,12 @@ local working_dir = mp.get_property("working-directory")
 
 local M = {}
 
+local Lib = lib:new(working_dir)
+if not Lib then
+	mp.msg.warn("no directories with video files found")
+	return
+end
+
 local function dir_content_to_file()
 	local playlist_file = io.open(tmp_playlist, "w")
 	if playlist_file ~= nil then
@@ -24,6 +30,9 @@ end
 local function update_current()
 	mp.commandv("playlist-play-index", Lib.file_id:current() - 1)
 end
+
+update_playlist()
+update_current()
 
 function M.jump()
 	Lib:random_dir()
@@ -54,16 +63,6 @@ end
 
 function M.dir_prev()
 	Lib:prev_dir()
-	update_playlist()
-	update_current()
-end
-
-function M.init()
-	Lib = lib:new(working_dir)
-	if not Lib then
-		mp.msg.warn("no directories with video files found")
-		return
-	end
 	update_playlist()
 	update_current()
 end
